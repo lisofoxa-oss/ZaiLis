@@ -14,7 +14,6 @@
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-orange-50 to-amber-50 min-h-screen py-8">
     <div class="max-w-lg mx-auto px-4">
-        <!-- ЗАГОЛОВОК -->
         <div class="text-center mb-10">
             <div class="flex justify-center gap-6 text-7xl mb-3">
                 <span class="tail">🦊</span>
@@ -30,14 +29,12 @@
             <div class="bg-white rounded-3xl shadow-xl p-8 text-center">
                 <p class="text-xl mb-6">Кто в вашей паре кто?</p>
                 <div class="grid grid-cols-2 gap-4">
-                    <button onclick="chooseRole(0)" 
-                            class="bg-orange-500 hover:bg-orange-600 text-white rounded-2xl py-8 text-xl font-semibold transition-all active:scale-95">
+                    <button onclick="chooseRole(0)" class="bg-orange-500 hover:bg-orange-600 text-white rounded-2xl py-8 text-xl font-semibold transition-all active:scale-95">
                         <div class="text-5xl mb-2">🦊</div>
                         <div>Я — Лис</div>
                         <div class="text-xs opacity-75">мой партнёр — Зайка</div>
                     </button>
-                    <button onclick="chooseRole(1)" 
-                            class="bg-pink-500 hover:bg-pink-600 text-white rounded-2xl py-8 text-xl font-semibold transition-all active:scale-95">
+                    <button onclick="chooseRole(1)" class="bg-pink-500 hover:bg-pink-600 text-white rounded-2xl py-8 text-xl font-semibold transition-all active:scale-95">
                         <div class="text-5xl mb-2">🐰</div>
                         <div>Я — Зайка</div>
                         <div class="text-xs opacity-75">мой партнёр — Лис</div>
@@ -52,12 +49,9 @@
                     <div id="progress" class="text-sm font-medium text-orange-600">Вопрос 1 из 10</div>
                     <div class="text-sm text-gray-400">🧪 эксперимент</div>
                 </div>
-                
                 <div id="question-text" class="text-2xl font-medium text-gray-800 mb-8 leading-tight"></div>
-                
                 <div id="options" class="space-y-3"></div>
             </div>
-            <div class="text-center mt-6 text-xs text-gray-400">выбирайте вместе или по очереди — как веселее 😊</div>
         </div>
 
         <div id="screen-result" class="hidden text-center">
@@ -67,8 +61,7 @@
                 <div id="result-percent" class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-pink-500 mb-4"></div>
                 <p id="result-text" class="text-lg text-gray-700 leading-relaxed"></p>
                 
-                <button onclick="restart()" 
-                        class="mt-10 bg-gradient-to-r from-orange-500 to-pink-500 text-white px-10 py-4 rounded-2xl text-xl font-semibold hover:scale-105 transition-all">
+                <button onclick="restart()" class="mt-10 bg-gradient-to-r from-orange-500 to-pink-500 text-white px-10 py-4 rounded-2xl text-xl font-semibold hover:scale-105 transition-all">
                     Пройти ещё раз 🧪
                 </button>
             </div>
@@ -76,31 +69,21 @@
     </div>
 
     <script>
-        let role = 0; // 0 = Я Лис, 1 = Я Зайка
+        let role = null; // теперь null, чтобы точно выбирали
         let currentQuestion = 0;
         let answers = [];
         
-        const questions = [
-            { q: "Как вы обычно планируете выходные?", 
-              a: ["Спонтанная авантюра в неизвестность!", "Всё по плану: бронь, маршрут, тайминг", "Один предлагает, второй соглашается", "Лежим дома и никуда не хотим"] },
-            { q: "Когда один из вас в плохом настроении…", 
-              a: ["Придумываю 10 способов развеселить", "Просто обнимаю и молчу", "Делаю чай и оставляю пространство", "Начинаю шутить, пока не рассмеётся"] },
-            { q: "Подарки в вашей паре — это обычно…", 
-              a: ["Что-то неожиданное и крутое", "Милое, мягкое и пушистое", "Полезная вещь, о которой давно говорили", "Сертификат на совместное приключение"] },
-            { q: "Кто придумывает, куда поехать в отпуск?", 
-              a: ["Я! У меня уже 5 идей", "Мой партнёр, он/она всё просчитывает", "Кидаем монетку", "Тот, кто последний раз выбирал"] },
-            { q: "Утро в вашей квартире начинается с…", 
-              a: ["Кто первый встал — тот и будит", "Обнимашки минимум 10 минут", "Кофе в постель по очереди", "Кто громче зевает"] },
-            { q: "Когда нужно принять важное решение…", 
-              a: ["Я беру на себя (риск — моё второе имя)", "Мой партнёр — он/она лучше разбирается", "Долгий разговор за ужином", "Откладываем до последнего"] },
-            { q: "Как вы отмечаете маленькие победы?", 
-              a: ["Шампанское и торт в 23:00!", "Обнимашки и «я горжусь тобой»", "Просто «ура» и продолжаем день", "Заказываем суши"] },
-            { q: "Личное пространство в ваших отношениях…", 
-              a: ["Можно всё вместе 24/7", "Иногда нужно побыть одному — и это нормально", "У каждого свой уголок в квартире", "Партнёр всегда знает, где я"] },
-            { q: "Самое смешное в вашей паре — это…", 
-              a: ["Мои подколки и его/её реакция", "Как мы одновременно говорим одну и ту же фразу", "Наши попытки готовить вместе", "Когда мы оба в плохом настроении"] },
-            { q: "Если бы ваша пара была мультиком, то…", 
-              a: ["Про хитрого лиса и милую зайку", "Про двух неразлучных друзей", "Про приключения в лесу", "Про уютный домик и тёплый плед"] }
+        const questions = [ /* те же 10 вопросов, не менял */ 
+            { q: "Как вы обычно планируете выходные?", a: ["Спонтанная авантюра в неизвестность!", "Всё по плану: бронь, маршрут, тайминг", "Один предлагает, второй соглашается", "Лежим дома и никуда не хотим"] },
+            { q: "Когда один из вас в плохом настроении…", a: ["Придумываю 10 способов развеселить", "Просто обнимаю и молчу", "Делаю чай и оставляю пространство", "Начинаю шутить, пока не рассмеётся"] },
+            { q: "Подарки в вашей паре — это обычно…", a: ["Что-то неожиданное и крутое", "Милое, мягкое и пушистое", "Полезная вещь, о которой давно говорили", "Сертификат на совместное приключение"] },
+            { q: "Кто придумывает, куда поехать в отпуск?", a: ["Я! У меня уже 5 идей", "Мой партнёр, он/она всё просчитывает", "Кидаем монетку", "Тот, кто последний раз выбирал"] },
+            { q: "Утро в вашей квартире начинается с…", a: ["Кто первый встал — тот и будит", "Обнимашки минимум 10 минут", "Кофе в постель по очереди", "Кто громче зевает"] },
+            { q: "Когда нужно принять важное решение…", a: ["Я беру на себя (риск — моё второе имя)", "Мой партнёр — он/она лучше разбирается", "Долгий разговор за ужином", "Откладываем до последнего"] },
+            { q: "Как вы отмечаете маленькие победы?", a: ["Шампанское и торт в 23:00!", "Обнимашки и «я горжусь тобой»", "Просто «ура» и продолжаем день", "Заказываем суши"] },
+            { q: "Личное пространство в ваших отношениях…", a: ["Можно всё вместе 24/7", "Иногда нужно побыть одному — и это нормально", "У каждого свой уголок в квартире", "Партнёр всегда знает, где я"] },
+            { q: "Самое смешное в вашей паре — это…", a: ["Мои подколки и его/её реакция", "Как мы одновременно говорим одну и ту же фразу", "Наши попытки готовить вместе", "Когда мы оба в плохом настроении"] },
+            { q: "Если бы ваша пара была мультиком, то…", a: ["Про хитрого лиса и милую зайку", "Про двух неразлучных друзей", "Про приключения в лесу", "Про уютный домик и тёплый плед"] }
         ];
 
         function chooseRole(r) {
@@ -116,10 +99,8 @@
             const q = questions[currentQuestion];
             document.getElementById('progress').textContent = `Вопрос ${currentQuestion + 1} из 10`;
             document.getElementById('question-text').textContent = q.q;
-            
             const optsDiv = document.getElementById('options');
             optsDiv.innerHTML = '';
-            
             q.a.forEach((text, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'w-full text-left bg-gray-50 hover:bg-orange-100 border border-transparent hover:border-orange-300 rounded-2xl px-6 py-5 text-lg transition-all';
@@ -131,7 +112,6 @@
 
         function selectAnswer(choice) {
             answers.push(choice);
-            
             if (currentQuestion < 9) {
                 currentQuestion++;
                 showQuestion();
@@ -144,35 +124,38 @@
             document.getElementById('screen-quiz').classList.add('hidden');
             const resultScreen = document.getElementById('screen-result');
             resultScreen.classList.remove('hidden');
-            
-            // Простой подсчёт (чем больше «дополняющих» ответов — тем выше %)
+
             let score = 0;
-            const goodPairs = [1, 2, 0, 1, 1, 1, 1, 1, 0, 0]; // пример идеальных выборов
+            const ideal = [1, 2, 0, 1, 1, 1, 1, 1, 0, 0];
             answers.forEach((a, i) => {
-                if (Math.abs(a - goodPairs[i]) <= 1) score += 10;
+                if (Math.abs(a - ideal[i]) <= 1) score += 10;
             });
-            const percent = Math.min(95, 50 + score); // минимум 50%, максимум 95%
-            
+            const percent = Math.min(95, 50 + score);
+
+            const isFox = role === 0;
+            const you = isFox ? "Ты — хитрый Лис" : "Ты — пушистая Зайка";
+            const partner = isFox ? "твоя Зайка" : "твой Лис";
+
             let title, emoji, text;
-            
+
             if (percent >= 85) {
-                title = "Вы — ЛЕГЕНДАРНАЯ ПАРА!";
+                title = "ЛЕГЕНДАРНАЯ ПАРА!";
                 emoji = "🔥🦊🐰";
-                text = "По шкале лис-зайкиности вы 100% совместимы! Лис хитрит и придумывает приключения, Зайка спасает теплом и уютом. Вместе вы — идеальный лесной дуэт 💕";
+                text = `${you}, а ${partner} — твоя идеальная половинка! Вы дополняете друг друга на 100%. Лес в шоке от вашей совместимости 💕`;
             } else if (percent >= 70) {
                 title = "Отличная совместимость!";
                 emoji = "🌟🦊🐰";
-                text = "Вы прекрасно дополняете друг друга. Иногда лис убегает в свои авантюры, но всегда возвращается к своей зайке. 90% лесных пар вам завидуют!";
+                text = `${you} + ${partner} = почти идеал! Иногда вы спорите, но всегда находите общий пенёк. 90% пар вам завидуют!`;
             } else if (percent >= 55) {
-                title = "Хорошая пара, но есть куда расти 😉";
+                title = "Хорошая пара, но можно лучше 😉";
                 emoji = "🌳🦊🐰";
-                text = "Вы как два разных зверька в одном лесу — иногда спорите, но всегда находите общий пенёк. Добавьте больше обнимашек и будет идеально!";
+                text = `${you} и ${partner} — вы как два разных зверька в одном лесу. Добавьте чуть больше обнимашек и будет огонь!`;
             } else {
-                title = "Вы — редкий вид!";
+                title = "Вы — редкий и уникальный вид!";
                 emoji = "🍄🦊🐰";
-                text = "Ваша пара уникальна! Может, вы оба немного лисы или оба зайки, но именно это и делает вас особенными. Главное — продолжайте вместе исследовать лес жизни ❤️";
+                text = `${you} и ${partner} — ваша пара особенная. Может вы оба немного лисы или оба зайки, но именно это делает вас невероятными ❤️`;
             }
-            
+
             document.getElementById('result-emoji').innerHTML = emoji;
             document.getElementById('result-title').textContent = title;
             document.getElementById('result-percent').textContent = percent + "%";
@@ -182,10 +165,8 @@
         function restart() {
             document.getElementById('screen-result').classList.add('hidden');
             document.getElementById('screen-start').classList.remove('hidden');
+            role = null;
         }
-
-        // Запуск Tailwind
-        document.documentElement.style.setProperty('--tw-ring-color', 'rgb(249 115 22)');
     </script>
 </body>
 </html>
