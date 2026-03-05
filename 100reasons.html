@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Cormorant Garamond',serif;background:#0a0a14;color:#f0e6d3;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+
+.stars{position:fixed;inset:0;z-index:0;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d) ease-in-out infinite alternate}
+@keyframes twinkle{0%{opacity:.1;transform:scale(.8)}100%{opacity:var(--o);transform:scale(1.2)}}
+
+.glow{position:fixed;width:300px;height:300px;border-radius:50%;filter:blur(80px);opacity:.15;z-index:0;pointer-events:none}
+.glow-1{background:radial-gradient(circle,#e8a0bf,transparent);top:20%;left:10%;animation:drift1 12s ease-in-out infinite alternate}
+.glow-2{background:radial-gradient(circle,#c9a87c,transparent);bottom:10%;right:10%;animation:drift2 15s ease-in-out infinite alternate}
+@keyframes drift1{0%{transform:translate(0,0)}100%{transform:translate(40px,-30px)}}
+@keyframes drift2{0%{transform:translate(0,0)}100%{transform:translate(-30px,20px)}}
+
+.container{position:relative;z-index:2;width:100%;max-width:440px;padding:20px;text-align:center;display:flex;flex-direction:column;align-items:center;min-height:100vh;justify-content:center}
+
+/* Intro screen */
+.intro{display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fadeIn 1.5s ease both}
+.intro-heart{font-size:72px;animation:heartbeat 1.5s ease infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.15)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
+.intro h1{font-family:'Caveat',cursive;font-size:36px;font-weight:700;color:#e8a0bf;margin:20px 0 8px;line-height:1.2}
+.intro p{font-size:18px;color:#a09484;font-style:italic;margin-bottom:32px;letter-spacing:.5px}
+.start-btn{background:none;border:1.5px solid rgba(232,160,191,.4);color:#e8a0bf;font-family:'Caveat',cursive;font-size:22px;font-weight:600;padding:14px 40px;border-radius:50px;cursor:pointer;transition:all .5s;letter-spacing:1px}
+.start-btn:hover,.start-btn:active{background:rgba(232,160,191,.1);border-color:#e8a0bf;transform:scale(1.05)}
+
+/* Card */
+.card-wrap{display:none;flex-direction:column;align-items:center;width:100%}
+.card-wrap.show{display:flex}
+
+.counter{font-family:'Caveat',cursive;font-size:20px;color:#6a5d50;margin-bottom:16px;letter-spacing:2px}
+.counter .current{color:#e8a0bf;font-size:28px;font-weight:700}
+
+.card{width:100%;min-height:240px;display:flex;align-items:center;justify-content:center;padding:32px 28px;position:relative}
+.card-inner{width:100%;border:1px solid rgba(232,160,191,.15);border-radius:20px;padding:40px 28px;background:rgba(255,255,255,.03);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.card-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(232,160,191,.3),transparent)}
+.card-inner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,124,.2),transparent)}
+
+.reason{font-family:'Caveat',cursive;font-size:26px;font-weight:500;line-height:1.5;color:#f0e6d3;opacity:0;transform:translateY(15px);transition:all .6s ease}
+.reason.visible{opacity:1;transform:translateY(0)}
+
+.emoji-float{position:absolute;font-size:24px;opacity:0;pointer-events:none;z-index:10}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1) rotate(0deg)}100%{opacity:0;transform:translateY(-120px) scale(.6) rotate(20deg)}}
+
+.hint{font-size:14px;color:#5a5048;margin-top:20px;font-style:italic;letter-spacing:.5px;opacity:0;animation:fadeIn 2s ease 1s both}
+
+.progress-bar{width:60%;max-width:200px;height:2px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:24px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#e8a0bf,#c9a87c);border-radius:2px;transition:width .6s ease;width:0}
+
+/* Final screen */
+.finale{display:none;flex-direction:column;align-items:center;text-align:center}
+.finale.show{display:flex;animation:fadeIn 1s ease both}
+.finale-heart{font-size:80px;margin-bottom:16px;animation:heartbeat 1.5s ease infinite}
+.finale h2{font-family:'Caveat',cursive;font-size:32px;color:#e8a0bf;margin-bottom:12px;line-height:1.3}
+.finale p{font-size:16px;color:#a09484;font-style:italic;line-height:1.6;max-width:300px}
+.restart-btn{margin-top:28px;background:none;border:1px solid rgba(232,160,191,.3);color:#a09484;font-family:'Caveat',cursive;font-size:18px;padding:10px 28px;border-radius:50px;cursor:pointer;transition:all .4s}
+.restart-btn:hover,.restart-btn:active{color:#e8a0bf;border-color:#e8a0bf}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* Swipe hint arrow */
+.swipe-hint{display:flex;align-items:center;justify-content:center;gap:8px;color:#5a5048;font-size:13px;margin-top:8px;animation:fadeIn 2s ease 2s both;opacity:0}
+.nav-hints{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:300px;margin-top:16px;animation:fadeIn 2s ease 1.5s both;opacity:0}
+.nav-hint-left,.nav-hint-right{font-size:13px;color:#5a5048;cursor:pointer;padding:8px 12px;transition:color .3s}
+.nav-hint-left:active,.nav-hint-right:active{color:#e8a0bf}
+.nav-hint-left.hidden{visibility:hidden}
+.nav-hint-center{font-size:14px;color:#6a5d50;font-style:italic}
+.saved-badge{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(232,160,191,.15);border:1px solid rgba(232,160,191,.2);color:#e8a0bf;font-family:'Caveat',cursive;font-size:16px;padding:8px 20px;border-radius:30px;opacity:0;transition:opacity .5s;z-index:10;pointer-events:none}
+.saved-badge.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<div class="saved-badge" id="savedBadge">💾 место сохранено</div>
+
+<div class="container">
+  <!-- Intro -->
+  <div class="intro" id="intro">
+    <div class="intro-heart">💕</div>
+    <h1>100 причин,<br>почему ты особенная</h1>
+    <p>можно читать по чуть-чуть — я подожду 💌</p>
+    <button class="start-btn" id="startBtn">Открыть 💌</button>
+    <div class="resume-note" id="resumeNote" style="display:none;margin-top:14px;font-size:14px;color:#a09484;font-style:italic"></div>
+  </div>
+
+  <!-- Cards -->
+  <div class="card-wrap" id="cardWrap">
+    <div class="counter"><span class="current" id="num">1</span> <span style="opacity:.4">/</span> <span style="opacity:.5">100</span></div>
+    <div class="card" id="card">
+      <div class="card-inner">
+        <div class="reason" id="reason"></div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <div class="nav-hints">
+      <span class="nav-hint-left" id="hintLeft">← назад</span>
+      <span class="nav-hint-center">нажми на карточку</span>
+      <span class="nav-hint-right">вперёд →</span>
+    </div>
+    <div class="swipe-hint" id="swipeHint">или свайпай влево-вправо ✨</div>
+  </div>
+
+  <!-- Finale -->
+  <div class="finale" id="finale">
+    <div class="finale-heart">💗</div>
+    <h2>Спасибо, что дочитала 🤍</h2>
+    <p>Ты — моё сокровище. Я безумно благодарен, что мы так случайно встретились. И это только начало — каждый день я нахожу новые причины.</p>
+    <p style="margin-top:16px;font-size:18px;color:#e8a0bf;font-family:'Caveat',cursive;font-weight:600">Я тебя люблю 💕</p>
+    <button class="restart-btn" id="restartBtn">С начала 💕</button>
+  </div>
+</div>
+
+<script>
+var reasons=[
+// Переписка и стикеры
+"Потому что сделала для нас стикерпаки 💕",
+"Потому что я всегда радуюсь твоим новым сообщениям",
+"Потому что мне нравится ждать твоих сообщений",
+"Потому что присылаешь мне стикер с котиком в поцелуях 😽",
+"Потому что переписка с тобой милее всего на свете",
+"Потому что я улыбаюсь телефону как дурак из-за тебя 😊",
+"Потому что читаешь мои сообщения практически мгновенно",
+"Потому что отвечаешь почти на все мои вопросы... правда чаще всего «не скажу» 😂",
+"Потому что не хочется отпускать тебя перед сном",
+"Потому что когда вижу, что ты онлайн — сразу так приятно становится",
+// Характер и вредность
+"Потому что ты такая милая вредина 😈",
+"Потому что когда ты злишься — хочется обнимать тебя не отпуская",
+"Потому что когда ты обижаешься, мне становится ещё обиднее, что я виноват",
+"Потому что ты не прячешь от меня свой настоящий характер",
+"Потому что ты дерзкая, но за этим столько нежности",
+"Потому что ты отказываешь скидывать фото в маечке навсегда 😤",
+"Потому что с тобой не скучно — никогда",
+"Потому что ты показываешь свои эмоции стикерами",
+"Потому что ты так резко обижаешься, что я даже не успеваю понять на что",
+"Потому что ты не притворяешься — ни когда весело, ни когда злишься",
+"Потому что даже твои «иди нахуй» звучат как «останься навсегда» 💀",
+"Потому что ты та самая — красивая и отбитая",
+"Потому что ты любишь издеваться надо мной",
+// Юмор
+"Потому что ты смеёшься над моими шутками 😄",
+"Потому что я обожаю твои ПХПХППХ",
+"Потому что ты умеешь рассмешить и у меня постоянно болит рот от смеха",
+"Потому что с тобой можно ржать над полной ерундой",
+"Потому что ты любишь шутить",
+"Потому что ты шутишь с серьёзным лицом и это убивает",
+"Потому что «ХАХАХА» от тебя — лучшая награда",
+"Потому что мы понимаем одни и те же мемы",
+// Нежность и забота
+"Потому что за вредностью ты прячешь столько тепла 🤍",
+"Потому что ты интересуешься как у меня дела",
+"Потому что ты напоминаешь мне чтобы я закинул стирку 😂",
+"Потому что ты умеешь быть нежной — когда решишь",
+"Потому что твоя забота — тихая, но ощутимая",
+"Потому что ты пишешь «ты кушал?» — и это так приятно",
+"Потому что ты переживаешь — даже если делаешь вид что нет",
+"Потому что иногда за сарказмом прячется «я скучаю»",
+"Потому что когда ты добрая — мир становится ярче ✨",
+"Потому что ты делаешь хорошо просто так, не за что-то",
+// Внешность
+"Потому что ты красивая — и точка 💫",
+"Потому что твои фото заставляют залипнуть... жалко только некоторые всего на 10 секунд",
+"Потому что у тебя чудесные волосы",
+"Потому что у тебя есть глаза, которые я ещё не видел",
+"Потому что твоя улыбка постоянно не попадает в кадры для меня",
+"Потому что ты и котик на одной фотографии — это праздник 🐱",
+"Потому что я хочу видеть тебя вживую каждый день",
+// Что ты делаешь со мной
+"Потому что из-за тебя я сделал целого бота... а то и двух 😂",
+"Потому что ты так сильно веселишь меня своими стикерами",
+"Потому что ты первый человек, о ком я думаю утром ☀️",
+"Потому что мне даже ждать тебя уже приятно",
+"Потому что ты заставляешь меня быть лучше",
+"Потому что даже в переписке с тобой я — это я",
+"Потому что ты сломала все мои планы — в лучшем смысле",
+"Потому что я не думал что буду таким из-за человека в телефоне",
+"Потому что мне с тобой так спокойно и я тебе доверяю",
+"Потому что ты делаешь обычный вечер — особенным",
+"Потому что я уже не помню как было до тебя",
+// Мелочи и моменты
+"Потому что ты — это ты. Без фильтров",
+"Потому что мне нравится даже то, как ты злишься",
+"Потому что ты настоящая — не прячешь от меня все свои стороны",
+"Потому что с тобой даже тишина в чате всё равно уютная",
+"Потому что ты умеешь удивлять",
+"Потому что я не могу нарадоваться, что мы проводим так много времени общаясь",
+"Потому что ты делаешь меня таким счастливым 🥹",
+// Особенное
+"Потому что ты потрясающе рисуешь 🎨",
+"Потому что ты так мило краснеешь",
+"Потому что я чувствую как тебе хорошо со мной",
+"Потому что ты пишешь такие чудесные сказочки ✍️",
+"Потому что с тобой время летит незаметно",
+"Потому что только ты умудряешься разрядить мой телефон уже до обеда 🪫",
+"Потому что заебала... ну а чо быть такой няшкой 🫠",
+"Потому что с тобой просто тепло",
+"Потому что у тебя чудесное имя",
+"Потому что ты можешь написать мне первой",
+"Потому что ты безумно стеснительная и мне это нравится",
+"Потому что ты делаешь очень экстремальные поступки ради меня",
+"Потому что я до сих пор в шоке от твоей фоточки в маечке 🫣",
+"Потому что мне нравятся твои любимые песни 🎵",
+"Потому что я готов часами придумывать причины почему ты особенная",
+"Потому что ради тебя я реально делаю странные вещи",
+"Потому что делишься со мной хорошим и плохим",
+"Потому что рекомендуешь мне интересные фильмы к просмотру 🍿",
+"Потому что у тебя потрясающий почерк",
+"Потому что я обожаю твои фотографии природы 🌿",
+"Потому что ты так любишь животных",
+"Потому что твой котик — самый счастливый, потому что у него есть ты 🐱",
+"Потому что ты стесняешься комплиментов — и от этого хочется говорить их ещё больше",
+"Потому что я готов делать для тебя сюрпризы, ботиков и вообще что угодно",
+"Потому что ты не хочешь делиться своим котиком со мной 😾",
+"Потому что я даже поставил твой рисунок на обои телефона",
+"Потому что тебе нравится читать комплименты, но ты не показываешь виду",
+"Потому что ты присылаешь фото на 10 секунд — и мне приходится запоминать каждый твой изгиб 🔥",
+"Потому что ты экстремалка — и это пугает и восхищает одновременно",
+"Потому что ты пишешь от руки красивее, чем шрифты в телефоне",
+"Потому что ты девушка, которая мне нравится — вот так просто 💛",
+"Потому что я хочу быть причиной твоей улыбки",
+"Потому что даже через экран я чувствую тебя рядом",
+"Потому что впереди у нас ещё столько всего — и я не могу дождаться 💕"
+];
+
+var idx=0,el=document.getElementById('reason'),numEl=document.getElementById('num'),progEl=document.getElementById('progress');
+
+// Stars
+(function(){var s=document.getElementById('stars');for(var i=0;i<80;i++){var d=document.createElement('div');d.className='star';var size=Math.random()*2+1;d.style.cssText='width:'+size+'px;height:'+size+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--d:'+(2+Math.random()*4)+'s;--o:'+(0.3+Math.random()*0.7);s.appendChild(d);}})();
+
+// Save/load progress
+function saveProgress(){try{localStorage.setItem('reasons_idx',idx);var b=document.getElementById('savedBadge');b.classList.add('show');setTimeout(function(){b.classList.remove('show');},1500);}catch(e){}}
+function loadProgress(){try{var s=localStorage.getItem('reasons_idx');return s?parseInt(s):0;}catch(e){return 0;}}
+
+// Check for saved progress on load
+var saved=loadProgress();
+if(saved>0&&saved<reasons.length){
+  idx=saved;
+  document.getElementById('resumeNote').style.display='block';
+  document.getElementById('resumeNote').textContent='Ты остановилась на '+saved+'/100 — продолжим? 💌';
+  document.getElementById('startBtn').textContent='Продолжить 💌';
+}
+
+function updateHintLeft(){
+  var h=document.getElementById('hintLeft');
+  if(idx<=0)h.classList.add('hidden');else h.classList.remove('hidden');
+}
+
+function showReason(dir){
+  el.classList.remove('visible');
+  var d=dir||'next';
+  el.style.transform=d==='prev'?'translateY(-15px)':'translateY(15px)';
+  setTimeout(function(){
+    el.textContent=reasons[idx];
+    numEl.textContent=idx+1;
+    progEl.style.width=((idx+1)/reasons.length*100)+'%';
+    el.style.transform='translateY(0)';
+    el.classList.add('visible');
+    updateHintLeft();
+    if(d==='next')spawnEmoji();
+    saveProgress();
+  },200);
+}
+
+function spawnEmoji(){
+  var emojis=['💕','✨','💗','🌙','💫','🤍','💛','🦋'];
+  var card=document.getElementById('card');
+  for(var i=0;i<3;i++){
+    (function(i){
+      setTimeout(function(){
+        var e=document.createElement('div');e.className='emoji-float';
+        e.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+        e.style.left=(20+Math.random()*60)+'%';
+        e.style.bottom='20%';
+        e.style.animation='floatUp '+(1.5+Math.random())+'s ease forwards';
+        card.appendChild(e);
+        setTimeout(function(){e.remove();},2500);
+      },i*200);
+    })(i);
+  }
+}
+
+function goNext(){
+  idx++;
+  if(idx>=reasons.length){
+    document.getElementById('cardWrap').classList.remove('show');
+    document.getElementById('finale').classList.add('show');
+    try{localStorage.removeItem('reasons_idx');}catch(e){}
+    return;
+  }
+  showReason('next');
+}
+
+function goPrev(){
+  if(idx<=0)return;
+  idx--;
+  showReason('prev');
+}
+
+// Start
+document.getElementById('startBtn').addEventListener('click',function(){
+  document.getElementById('intro').style.display='none';
+  document.getElementById('cardWrap').classList.add('show');
+  showReason('next');
+});
+
+// Tap on card = next
+document.getElementById('card').addEventListener('click',goNext);
+
+// Nav hints
+document.getElementById('hintLeft').addEventListener('click',function(e){e.stopPropagation();goPrev();});
+document.querySelector('.nav-hint-right').addEventListener('click',function(e){e.stopPropagation();goNext();});
+
+// Restart
+document.getElementById('restartBtn').addEventListener('click',function(){
+  idx=0;
+  document.getElementById('finale').classList.remove('show');
+  document.getElementById('cardWrap').classList.add('show');
+  showReason('next');
+});
+
+// Swipe left/right
+var touchStartX=0,touchStartY=0;
+document.getElementById('card').addEventListener('touchstart',function(e){
+  touchStartX=e.touches[0].clientX;
+  touchStartY=e.touches[0].clientY;
+},{passive:true});
+document.getElementById('card').addEventListener('touchend',function(e){
+  var dx=e.changedTouches[0].clientX-touchStartX;
+  var dy=e.changedTouches[0].clientY-touchStartY;
+  if(Math.abs(dx)<40||Math.abs(dy)>Math.abs(dx))return; // ignore small or vertical
+  if(dx<0)goNext(); // swipe left = next
+  else goPrev(); // swipe right = back
+},{passive:true});
+</script>
+</body>
+</html>
